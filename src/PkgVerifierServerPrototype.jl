@@ -7,7 +7,7 @@ import JSON
 
 export serve
 
-repo = "/home/lachlan/signaturerepo"
+repo = ""
 certificates = Dict{ASCIIString,AbstractString}()
 
 function get_certificate(req)
@@ -16,7 +16,7 @@ function get_certificate(req)
     try 
         cert = certificates[package]
     catch error
-        return "Oh noes!"
+        return "\"FAILURE\""
     end
 
     return cert
@@ -44,7 +44,8 @@ end
     Mux.page("/push/:package", put_certificate),
     Mux.notfound())
 
-function serve()
+function serve(local_repo::AbstractString)
+    global repo = local_repo
     Mux.serve(verifier_server_app)
 end
 
